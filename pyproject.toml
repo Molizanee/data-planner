@@ -7,10 +7,12 @@ authors = [
     { name = "David Molizane", email = "david.molizane@icloud.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "playwright>=1.62.0",
+]
 
 [project.scripts]
-data-planner = "data_planner:main"
+pdf-convert = "data_planner.pdf:main"
 
 [build-system]
 requires = ["uv_build>=0.12.4,<0.13.0"]

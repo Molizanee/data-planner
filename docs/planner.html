@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>[TÍTULO DO TRABALHO]</title>
+<title>Tarefa 3 - Mapa Funcional e Fluxo de Dados</title>
 <style>
   @page {
     size: A4;
@@ -40,7 +40,7 @@
 
   p { margin: 0; text-indent: 1.25cm; }
 
-  /* Capa: instituição no topo, autor acima do centro, título ao centro, cidade/ano no rodapé. */
+  /* Capa: instituição no topo, autores acima do centro, título ao centro, cidade/ano no rodapé. */
   .capa {
     display: flex;
     flex-direction: column;
@@ -51,20 +51,21 @@
   .capa .titulo {
     font-size: 12pt;
     font-weight: bold;
-    text-transform: uppercase;
     margin: 0;
   }
   .capa .subtitulo { font-weight: normal; }
+  .capa .integrantes { margin-top: 1.5em; }
+  .capa .integrantes p { line-height: 1.35; }
+  .capa .ra { font-size: 10pt; }
 
   .corpo h1 {
     font-size: 12pt;
     font-weight: bold;
-    text-transform: uppercase;
     text-align: left;
-    margin: 0 0 1.5em;
-    page-break-before: always;
+    margin: 1.5em 0 0.75em;
+    page-break-after: avoid;
   }
-  .corpo > h1:first-child { page-break-before: avoid; }
+  .corpo > h1:first-child { margin-top: 0; }
   .corpo h1.sem-numeracao { text-align: center; }
 
   .corpo h2 {
@@ -75,20 +76,74 @@
     page-break-after: avoid;
   }
 
-  .citacao-longa {
-    margin: 1.5em 0 1.5em 4cm;
-    font-size: 10pt;
-    line-height: 1;
+  /* Quadros e figuras: título acima, fonte abaixo, fonte 10pt. */
+  .quadro { margin: 1.5em 0; page-break-inside: avoid; }
+  .quadro-titulo,
+  .figura-fonte {
     text-indent: 0;
-    text-align: justify;
+    font-size: 10pt;
+    line-height: 1.2;
+  }
+  .quadro-titulo { margin-bottom: 0.4em; }
+  .figura-fonte { margin-top: 0.4em; text-align: center; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    line-height: 1.2;
+  }
+  thead th {
+    text-align: left;
+    font-weight: bold;
+    border-top: 1pt solid #000;
+    border-bottom: 0.5pt solid #000;
+    padding: 0.35em 0.4em;
+  }
+  tbody td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.35em 0.4em;
+  }
+  tbody tr:last-child td { border-bottom: 1pt solid #000; }
+
+  /* Figura 1: fluxo em duas linhas, com retorno da direita para a esquerda. */
+  .fluxo {
+    margin: 1.5em 0 0;
+    page-break-inside: avoid;
+  }
+  .fluxo-linha {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.4em;
+  }
+  .fluxo-caixa {
+    flex: 1 1 0;
+    border: 0.5pt solid #000;
+    padding: 0.5em 0.4em;
+    text-align: center;
+    font-size: 10pt;
+    line-height: 1.2;
+  }
+  .fluxo-caixa strong { display: block; }
+  .fluxo-caixa span { font-size: 9pt; }
+  .fluxo-seta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12pt;
+    width: 1.2em;
+  }
+  .fluxo-descida {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.2em 0.4em;
+    font-size: 12pt;
   }
 
-  .referencia {
-    text-indent: 0;
-    text-align: left;
-    line-height: 1;
-    margin: 0 0 12pt;
-  }
+  .verificacao { font-size: 12pt; margin: 0.75em 0 0 1.25cm; padding: 0; }
+  .verificacao li { text-align: justify; margin-bottom: 0.4em; }
 
   @media print {
     html { background: none; }
@@ -108,55 +163,135 @@
 
 <section class="folha capa">
   <div>
-    <p>[NOME DA INSTITUIÇÃO]</p>
-    <p>[NOME DO CURSO]</p>
-    <p>[DISCIPLINA]</p>
+    <p>Centro Universitário da Fundação Hermínio Ometto - FHO</p>
+    <p>Engenharia da Computação - 6º semestre</p>
+    <p>Projeto Integrador</p>
+  </div>
+
+  <div class="integrantes">
+    <p>David Alves Molizane Neto <span class="ra">- RA 116195</span></p>
+    <p>Eric Aparecido Savassi <span class="ra">- RA 116822</span></p>
+    <p>Luis Felipe Travagim Braz Pinto <span class="ra">- RA 116508</span></p>
+    <p>Joseph Costa Anjos <span class="ra">- RA 115767</span></p>
+    <p>Pedro Antônio Rodrigues <span class="ra">- RA 117776</span></p>
   </div>
 
   <div>
-    <p>[NOME COMPLETO DO AUTOR]</p>
+    <h1 class="titulo">Tarefa 3 - Mapa Funcional e Fluxo de Dados</h1>
+    <p class="subtitulo">DataPlanner: organização funcional da plataforma e plano de implementação</p>
   </div>
 
   <div>
-    <h1 class="titulo">[TÍTULO DO TRABALHO]</h1>
-    <p class="subtitulo">[subtítulo, se houver]</p>
-  </div>
-
-  <div>
-    <p>[CIDADE]</p>
-    <p>[ANO]</p>
+    <p>Arara, SP</p>
+    <p>Setembro de 2026</p>
   </div>
 </section>
 
 <section class="folha corpo">
 
-  <h1>1 INTRODUÇÃO</h1>
-  <p>[Contextualize o tema em linhas gerais: o que é, por que importa e em que cenário se insere.]</p>
-  <p>[Delimite o problema e apresente a pergunta que o trabalho responde.]</p>
-  <p>[Apresente o objetivo geral, os objetivos específicos e a justificativa.]</p>
+  <h1>1 O problema que o DataPlanner ajuda a resolver</h1>
+  <p>O DataPlanner é uma plataforma de apoio à decisão: ela guarda informações, recupera o que é relevante, compara alternativas e apresenta um resultado que ajude alguém a decidir melhor. Para dar corpo a essa ideia, o grupo escolheu como cenário de referência o planejamento de entregas de uma transportadora de pequeno porte.</p>
+  <p>Hoje esse tipo de operação costuma ser organizada em planilhas ou no critério pessoal de quem monta as rotas, o que gera atraso em entregas urgentes e veículos sendo mal aproveitados. A decisão que o sistema precisa apoiar é simples de enunciar e difícil de fazer bem à mão: quais entregas devem sair primeiro e em qual veículo, considerando prazo, capacidade e distância. O DataPlanner não decide isso sozinho, ele organiza os dados e sugere uma ordem, deixando a palavra final com quem opera o sistema.</p>
 
-  <h1>2 DESENVOLVIMENTO</h1>
-  <p>[Fundamentação teórica: apresente os conceitos e autores que sustentam a argumentação.]</p>
+  <h1>2 Como dividimos as funções do sistema</h1>
+  <p>Separamos o DataPlanner em cinco módulos, cada um com uma responsabilidade única. O armazenamento de dados não é um módulo de decisão; ele existe como apoio, guardando o que os outros módulos produzem e consomem.</p>
 
-  <h2>2.1 [Título da subseção]</h2>
-  <p>[Desenvolva o primeiro ponto. Citação direta curta, com até três linhas, vai entre aspas no corpo do texto: "[trecho citado]" (SOBRENOME, 2020, p. 15).]</p>
+  <div class="quadro">
+    <p class="quadro-titulo">Quadro 1 - Módulos do DataPlanner aplicados ao cenário de entregas</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Módulo</th>
+          <th>Entrada</th>
+          <th>Ação</th>
+          <th>Saída</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cadastro</td>
+          <td>Clientes, entregas, veículos, prazos e prioridades.</td>
+          <td>Registrar e manter esses dados atualizados.</td>
+          <td>Dados disponíveis para os demais módulos.</td>
+        </tr>
+        <tr>
+          <td>Consulta</td>
+          <td>Dados armazenados e filtro escolhido pelo usuário.</td>
+          <td>Localizar entregas pendentes por região ou urgência.</td>
+          <td>Lista filtrada de entregas.</td>
+        </tr>
+        <tr>
+          <td>Análise</td>
+          <td>Entregas filtradas e veículos disponíveis.</td>
+          <td>Comparar prazo, capacidade, distância e custo.</td>
+          <td>Indicadores e alternativas possíveis.</td>
+        </tr>
+        <tr>
+          <td>Otimização</td>
+          <td>Alternativas, indicadores e restrições (ex.: capacidade máxima).</td>
+          <td>Ordenar e priorizar as alternativas segundo os critérios definidos.</td>
+          <td>Lista de alternativas priorizadas.</td>
+        </tr>
+        <tr>
+          <td>Apresentação</td>
+          <td>Alternativas priorizadas e indicadores.</td>
+          <td>Montar uma visão clara para quem vai decidir.</td>
+          <td>Lista final, indicadores e alertas na tela.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="figura-fonte">Fonte: elaboração do grupo.</p>
+  </div>
 
-  <blockquote class="citacao-longa">
-    [Citação direta com mais de três linhas: recuo de 4 cm da margem esquerda, fonte 10, espaçamento simples e sem aspas.] (SOBRENOME, 2020, p. 42).
-  </blockquote>
+  <p>Vale registrar uma distinção que usamos para pensar no sistema: entrega, veículo e rota são conceitos específicos do nosso cenário, mas cadastrar, consultar, comparar, priorizar e apresentar são funções genéricas, se um dia o DataPlanner precisasse organizar chamados de suporte em vez de entregas, esses cinco módulos continuariam fazendo sentido, só mudaria o que circula dentro deles.</p>
 
-  <p>[Comente a citação e conecte-a ao argumento.]</p>
+  <h1>3 Fluxo das informações</h1>
+  <p>O diagrama abaixo mostra o caminho que um dado percorre dentro do sistema. Cada seta representa o que passa de um módulo para o outro.</p>
 
-  <h2>2.2 [Título da subseção]</h2>
-  <p>[Desenvolva o segundo ponto: metodologia, análise, resultados ou discussão, conforme o trabalho.]</p>
+  <div class="fluxo">
+    <div class="fluxo-linha">
+      <div class="fluxo-caixa"><strong>Cadastro</strong><span>dados de entrada</span></div>
+      <div class="fluxo-seta">&rarr;</div>
+      <div class="fluxo-caixa"><strong>Dados armazenados</strong><span>apoio aos módulos</span></div>
+      <div class="fluxo-seta">&rarr;</div>
+      <div class="fluxo-caixa"><strong>Consulta</strong><span>busca e filtragem</span></div>
+    </div>
+    <div class="fluxo-descida">&darr;</div>
+    <div class="fluxo-linha">
+      <div class="fluxo-caixa"><strong>Apresentação</strong><span>resultado ao usuário</span></div>
+      <div class="fluxo-seta">&larr;</div>
+      <div class="fluxo-caixa"><strong>Otimização</strong><span>ordenação e prioridade</span></div>
+      <div class="fluxo-seta">&larr;</div>
+      <div class="fluxo-caixa"><strong>Análise</strong><span>comparações e indicadores</span></div>
+    </div>
+    <p class="figura-fonte">Figura 1 - Fluxo funcional do DataPlanner. Fonte: elaboração do grupo.</p>
+  </div>
 
-  <h1>3 CONCLUSÃO</h1>
-  <p>[Retome o problema, sintetize os resultados e responda aos objetivos. Sem introduzir informação nova.]</p>
+  <h2>3.1 Acompanhando um caso do começo ao fim</h2>
+  <p>Um exemplo ajuda a enxergar o fluxo funcionando na prática. O operador cadastra uma entrega urgente e os veículos disponíveis naquele dia, e esses dados ficam guardados e prontos para uso. Em seguida ele consulta quais entregas urgentes ainda estão pendentes; o sistema compara prazo, distância e capacidade de cada veículo disponível e monta as alternativas possíveis. Essas alternativas são ordenadas por prioridade e viabilidade, e o resultado chega ao operador já acompanhado dos indicadores que explicam por que aquela ordem foi sugerida, a decisão final continua sendo dele.</p>
 
-  <h1 class="sem-numeracao">REFERÊNCIAS</h1>
-  <p class="referencia">SOBRENOME, Nome. <strong>Título do livro</strong>: subtítulo. 2. ed. Cidade: Editora, 2020.</p>
-  <p class="referencia">SOBRENOME, Nome; SOBRENOME, Nome. Título do artigo. <strong>Nome da Revista</strong>, Cidade, v. 10, n. 2, p. 100-115, 2021.</p>
-  <p class="referencia">SOBRENOME, Nome. <strong>Título do documento eletrônico</strong>. Cidade, 2022. Disponível em: https://exemplo.com. Acesso em: 1 jan. 2026.</p>
+  <h1>4 Ferramentas que pretendemos usar e as dificuldades que já enxergamos</h1>
+  <p>Esta parte vai além do mapa funcional: é o nosso planejamento de como pretendemos construir o que descrevemos acima, e de onde já conseguimos prever atrito. As disciplinas de Banco de Dados e Estruturas de Dados, que estamos cursando agora, guiaram boa parte dessas escolhas.</p>
+  <p>A ideia é manter os dados em um banco relacional (pensamos em PostgreSQL), porque clientes, entregas e veículos se relacionam de um jeito que um banco relacional representa bem, sem duplicar informação. O cadastro seria um formulário web simples gravando direto nessas tabelas, e a consulta usaria SQL com índices nas colunas mais filtradas, como região, status e prioridade, já que buscar é a ação que o operador mais vai repetir no dia a dia.</p>
+
+  <h2>4.1 O ponto que mais nos preocupa: fazer o Python conversar com o banco</h2>
+  <p>O módulo de Análise é onde prevemos a maior dificuldade real de implementação. A conta e a comparação dos indicadores pretendemos fazer em Python, mas os dados moram no PostgreSQL, ou seja, cada análise depende do Python abrir uma conexão com o banco (via algo como psycopg2 ou SQLAlchemy), buscar o que precisa e só então processar. Isso traz decisões que ainda não tínhamos parado para pensar direito: filtrar e agregar já dentro do SQL (mais rápido, mas exige escrever consultas mais elaboradas) ou trazer os dados brutos para o Python e processar com as estruturas que estamos aprendendo em Estruturas de Dados (mais simples de programar, mas com risco de puxar volume desnecessário e pesar a memória à toa).</p>
+  <p>Tem também um problema mais chato do que parece: tipos de dado não chegam do banco exatamente como o Python espera, datas, valores decimais e nulos já causaram confusão em exercícios menores da disciplina, e numa análise com várias tabelas envolvidas esse tipo de erro fica mais difícil de rastrear. Como Banco de Dados e Estruturas de Dados são matérias que estamos vendo ao mesmo tempo, sabemos que essa ponte entre os dois lados vai exigir um tempo real de ajuste antes da análise funcionar de forma confiável, e não só de "ligar as peças".</p>
+  <p>Depois que os dados voltam tratados do banco, a ideia para o módulo de Otimização é usar uma fila de prioridade (um heap) para ordenar as alternativas, e para a Apresentação, uma interface web simples em HTML/CSS, sem preocupação estética, só clareza para o operador decidir rápido. Para organizar o trabalho entre as cinco pessoas do grupo, pretendemos usar Git/GitHub para o código e um quadro Kanban (Trello ou GitHub Projects) para dividir tarefas.</p>
+  <p>Nada disso está implementado ainda, e a dificuldade do Python com o banco é uma previsão nossa, não algo que já testamos na prática, é o plano que vamos seguir e ajustar nas próximas etapas, conforme formos avançando em Banco de Dados e Estruturas de Dados.</p>
+
+  <h1>5 Revisando a organização que propusemos</h1>
+  <p>Usamos quatro perguntas para conferir se a divisão em módulos faz sentido, e essa revisão nos deixou confortáveis com o resultado:</p>
+  <ul class="verificacao">
+    <li><strong>Coesão:</strong> cada módulo trata de um assunto só, cadastro não filtra, consulta não calcula indicador, otimização não decide sozinha.</li>
+    <li><strong>Acoplamento:</strong> baixo. Cada módulo recebe só o que precisa para trabalhar, a otimização, por exemplo, não precisa saber o nome do cliente, só prazo, capacidade e prioridade.</li>
+    <li><strong>Integração:</strong> está clara. O Quadro 1 mostra exatamente o que cada seta do fluxograma carrega de um módulo para o próximo.</li>
+    <li><strong>Caráter genérico:</strong> os módulos sobrevivem a uma troca de domínio; só as entidades específicas (entrega, veículo) mudariam.</li>
+  </ul>
+  <p>Com isso, também conferimos os pontos exigidos nesta etapa: cada função aparece em um único módulo; está claro o que fica armazenado e o que passa de módulo para módulo; é possível seguir um dado desde o cadastro até o resultado final; e busca, ordenação e priorização estão identificadas como necessidades futuras, sem implementação nesta etapa.</p>
+
+  <h1>6 Considerações finais</h1>
+  <p>Este documento fecha a etapa conceitual do DataPlanner: definimos os cinco módulos, o caminho que a informação percorre entre eles e um caso completo usando entregas como exemplo. A partir daqui, o próximo passo natural é usar Banco de Dados para desenhar as tabelas e relacionamentos por trás do módulo de cadastro, e Estruturas de Dados para implementar de fato a busca, a ordenação e a priorização que hoje existem só no papel.</p>
 
 </section>
 

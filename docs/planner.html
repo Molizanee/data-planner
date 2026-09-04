@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tarefa 3 - Mapa Funcional e Fluxo de Dados</title>
+<title>Tarefa 3 - Mapa Funcional e Fluxo de Dados - DataPlanner</title>
 <style>
   @page {
     size: A4;
@@ -178,11 +178,11 @@
 
   <div>
     <h1 class="titulo">Tarefa 3 - Mapa Funcional e Fluxo de Dados</h1>
-    <p class="subtitulo">DataPlanner: organização funcional da plataforma e plano de implementação</p>
+    <p class="subtitulo">DataPlanner: das informações em documentos para um grafo de relações da empresa</p>
   </div>
 
   <div>
-    <p>Arara, SP</p>
+    <p>Araras, SP</p>
     <p>Setembro de 2026</p>
   </div>
 </section>
@@ -190,14 +190,14 @@
 <section class="folha corpo">
 
   <h1>1 O problema que o DataPlanner ajuda a resolver</h1>
-  <p>O DataPlanner é uma plataforma de apoio à decisão: ela guarda informações, recupera o que é relevante, compara alternativas e apresenta um resultado que ajude alguém a decidir melhor. Para dar corpo a essa ideia, o grupo escolheu como cenário de referência o planejamento de entregas de uma transportadora de pequeno porte.</p>
-  <p>Hoje esse tipo de operação costuma ser organizada em planilhas ou no critério pessoal de quem monta as rotas, o que gera atraso em entregas urgentes e veículos sendo mal aproveitados. A decisão que o sistema precisa apoiar é simples de enunciar e difícil de fazer bem à mão: quais entregas devem sair primeiro e em qual veículo, considerando prazo, capacidade e distância. O DataPlanner não decide isso sozinho, ele organiza os dados e sugere uma ordem, deixando a palavra final com quem opera o sistema.</p>
+  <p>A informação sobre como o trabalho acontece na empresa está espalhada em documentos soltos, atas de reunião, organogramas, procedimentos e planos de projeto, quase todos em Word ou PDF e boa parte deles apenas digitalizada. O que está escrito ali nunca é cruzado: quem responde por qual projeto, qual setor depende de qual e qual documento sustenta cada processo são coisas que só existem na cabeça das pessoas ou dentro desses arquivos.</p>
+  <p>A decisão que o sistema precisa apoiar é onde estão os gargalos de relação, por exemplo um setor que concentra a aprovação de vários projetos ao mesmo tempo, ou uma única pessoa que é o único elo entre dois setores. O DataPlanner lê os documentos, transforma o que está escrito em um grafo de pessoas, setores, projetos e documentos e mostra esses pontos de concentração. Ele não decide nada sozinho, ele aponta e ordena os pontos críticos para quem vai agir.</p>
 
   <h1>2 Como dividimos as funções do sistema</h1>
-  <p>Separamos o DataPlanner em cinco módulos, cada um com uma responsabilidade única. O armazenamento de dados não é um módulo de decisão; ele existe como apoio, guardando o que os outros módulos produzem e consomem.</p>
+  <p>Separamos o DataPlanner em cinco módulos, cada um com uma responsabilidade única. O grafo guardado no Neo4j não é um módulo de decisão; ele existe como apoio, é o armazenamento que os outros módulos alimentam e consultam.</p>
 
   <div class="quadro">
-    <p class="quadro-titulo">Quadro 1 - Módulos do DataPlanner aplicados ao cenário de entregas</p>
+    <p class="quadro-titulo">Quadro 1 - Módulos do DataPlanner</p>
     <table>
       <thead>
         <tr>
@@ -209,89 +209,91 @@
       </thead>
       <tbody>
         <tr>
-          <td>Cadastro</td>
-          <td>Clientes, entregas, veículos, prazos e prioridades.</td>
-          <td>Registrar e manter esses dados atualizados.</td>
-          <td>Dados disponíveis para os demais módulos.</td>
+          <td>Ingestão</td>
+          <td>Documentos da empresa em Word, PDF ou PDF digitalizado.</td>
+          <td>Extrair o texto do arquivo, usando OCR quando a página é imagem.</td>
+          <td>Texto puro, com a identificação do documento de origem.</td>
         </tr>
         <tr>
-          <td>Consulta</td>
-          <td>Dados armazenados e filtro escolhido pelo usuário.</td>
-          <td>Localizar entregas pendentes por região ou urgência.</td>
-          <td>Lista filtrada de entregas.</td>
+          <td>Estruturação</td>
+          <td>Texto puro e a ontologia definida pelo grupo.</td>
+          <td>Pedir ao LLM que identifique pessoas, setores, projetos, documentos e as relações entre eles.</td>
+          <td>JSON com a lista de entidades e de relações.</td>
         </tr>
         <tr>
-          <td>Análise</td>
-          <td>Entregas filtradas e veículos disponíveis.</td>
-          <td>Comparar prazo, capacidade, distância e custo.</td>
-          <td>Indicadores e alternativas possíveis.</td>
+          <td>Carga</td>
+          <td>JSON validado.</td>
+          <td>Percorrer o JSON e gravar cada entidade como nó e cada relação como ligação no Neo4j.</td>
+          <td>Grafo atualizado no banco.</td>
         </tr>
         <tr>
-          <td>Otimização</td>
-          <td>Alternativas, indicadores e restrições (ex.: capacidade máxima).</td>
-          <td>Ordenar e priorizar as alternativas segundo os critérios definidos.</td>
-          <td>Lista de alternativas priorizadas.</td>
+          <td>Consulta e análise</td>
+          <td>Grafo armazenado e o recorte pedido pelo usuário (setor, projeto ou pessoa).</td>
+          <td>Buscar a vizinhança pedida, contar as ligações e ordenar os pontos que concentram mais dependências.</td>
+          <td>Lista de gargalos candidatos, com seus indicadores.</td>
         </tr>
         <tr>
           <td>Apresentação</td>
-          <td>Alternativas priorizadas e indicadores.</td>
-          <td>Montar uma visão clara para quem vai decidir.</td>
-          <td>Lista final, indicadores e alertas na tela.</td>
+          <td>Lista de gargalos e indicadores.</td>
+          <td>Montar a visão do grafo e o resumo dos pontos críticos.</td>
+          <td>Tela com o grafo, a lista ordenada e os indicadores.</td>
         </tr>
       </tbody>
     </table>
     <p class="figura-fonte">Fonte: elaboração do grupo.</p>
   </div>
 
-  <p>Vale registrar uma distinção que usamos para pensar no sistema: entrega, veículo e rota são conceitos específicos do nosso cenário, mas cadastrar, consultar, comparar, priorizar e apresentar são funções genéricas, se um dia o DataPlanner precisasse organizar chamados de suporte em vez de entregas, esses cinco módulos continuariam fazendo sentido, só mudaria o que circula dentro deles.</p>
+  <p>Vale registrar uma distinção que usamos para pensar no sistema: pessoa, setor, projeto e documento são conceitos específicos do nosso cenário, mas extrair, estruturar, carregar, consultar e apresentar são funções genéricas, se um dia o DataPlanner precisasse mapear clientes e contratos em vez de setores e projetos, esses cinco módulos continuariam fazendo sentido, só mudaria o que circula dentro deles.</p>
 
   <h1>3 Fluxo das informações</h1>
   <p>O diagrama abaixo mostra o caminho que um dado percorre dentro do sistema. Cada seta representa o que passa de um módulo para o outro.</p>
 
   <div class="fluxo">
     <div class="fluxo-linha">
-      <div class="fluxo-caixa"><strong>Cadastro</strong><span>dados de entrada</span></div>
+      <div class="fluxo-caixa"><strong>Ingestão</strong><span>texto extraído dos arquivos</span></div>
       <div class="fluxo-seta">&rarr;</div>
-      <div class="fluxo-caixa"><strong>Dados armazenados</strong><span>apoio aos módulos</span></div>
+      <div class="fluxo-caixa"><strong>Estruturação</strong><span>entidades e relações em JSON</span></div>
       <div class="fluxo-seta">&rarr;</div>
-      <div class="fluxo-caixa"><strong>Consulta</strong><span>busca e filtragem</span></div>
+      <div class="fluxo-caixa"><strong>Carga</strong><span>grava no banco de grafos</span></div>
     </div>
     <div class="fluxo-descida">&darr;</div>
     <div class="fluxo-linha">
       <div class="fluxo-caixa"><strong>Apresentação</strong><span>resultado ao usuário</span></div>
       <div class="fluxo-seta">&larr;</div>
-      <div class="fluxo-caixa"><strong>Otimização</strong><span>ordenação e prioridade</span></div>
+      <div class="fluxo-caixa"><strong>Consulta e análise</strong><span>busca e indicadores</span></div>
       <div class="fluxo-seta">&larr;</div>
-      <div class="fluxo-caixa"><strong>Análise</strong><span>comparações e indicadores</span></div>
+      <div class="fluxo-caixa"><strong>Grafo no Neo4j</strong><span>armazenamento de apoio</span></div>
     </div>
     <p class="figura-fonte">Figura 1 - Fluxo funcional do DataPlanner. Fonte: elaboração do grupo.</p>
   </div>
 
   <h2>3.1 Acompanhando um caso do começo ao fim</h2>
-  <p>Um exemplo ajuda a enxergar o fluxo funcionando na prática. O operador cadastra uma entrega urgente e os veículos disponíveis naquele dia, e esses dados ficam guardados e prontos para uso. Em seguida ele consulta quais entregas urgentes ainda estão pendentes; o sistema compara prazo, distância e capacidade de cada veículo disponível e monta as alternativas possíveis. Essas alternativas são ordenadas por prioridade e viabilidade, e o resultado chega ao operador já acompanhado dos indicadores que explicam por que aquela ordem foi sugerida, a decisão final continua sendo dele.</p>
+  <p>Um exemplo ajuda a enxergar o fluxo funcionando na prática. Uma ata de reunião do projeto "Implantação do ERP", digitalizada em PDF, entra na ingestão e sai como texto puro, junto da referência do arquivo de origem. A estruturação envia esse texto ao LLM com a ontologia e recebe de volta um JSON em que Ana Souza aparece como Pessoa, Qualidade como Setor e Implantação do ERP como Projeto, além das relações entre eles. A carga percorre esse JSON e grava os nós e as ligações no grafo. Quando o operador consulta aquele projeto, a análise varre a vizinhança e mostra que a Qualidade é o único setor que liga a área técnica ao financeiro dentro dele, ou seja, um ponto de concentração. A apresentação destaca esse ponto na tela, e a decisão de mudar ou não o fluxo continua sendo de quem opera.</p>
+  <p>Nesse caminho, também separamos o que fica guardado do que só passa. Ficam armazenados o texto extraído de cada arquivo com a referência do documento de origem, o JSON produzido para esse documento e o grafo no Neo4j. Já a lista filtrada de gargalos e os indicadores que a acompanham são calculados na hora do pedido, servem para responder àquela consulta e não são persistidos.</p>
 
   <h1>4 Ferramentas que pretendemos usar e as dificuldades que já enxergamos</h1>
   <p>Esta parte vai além do mapa funcional: é o nosso planejamento de como pretendemos construir o que descrevemos acima, e de onde já conseguimos prever atrito. As disciplinas de Banco de Dados e Estruturas de Dados, que estamos cursando agora, guiaram boa parte dessas escolhas.</p>
-  <p>A ideia é manter os dados em um banco relacional (pensamos em PostgreSQL), porque clientes, entregas e veículos se relacionam de um jeito que um banco relacional representa bem, sem duplicar informação. O cadastro seria um formulário web simples gravando direto nessas tabelas, e a consulta usaria SQL com índices nas colunas mais filtradas, como região, status e prioridade, já que buscar é a ação que o operador mais vai repetir no dia a dia.</p>
+  <p>A ideia é guardar os dados em um banco de grafos, e pensamos no Neo4j, porque o objeto de análise aqui são as relações e não os registros isolados. Uma pergunta como "quem liga o setor A ao setor B" vira um caminho a percorrer no grafo, enquanto em um banco relacional exigiria várias junções encadeadas e uma consulta difícil de escrever e de manter. A leitura dos arquivos seria feita em Python, com Tesseract fazendo o OCR das páginas que chegam como imagem, a estruturação usaria uma chamada de LLM por API, o JSON seria o formato intermediário entre a estruturação e a carga, e a carga usaria o driver oficial do Neo4j.</p>
+  <p>A ontologia inicial que combinamos é pequena de propósito, para caber em uma chamada de LLM e ser fácil de validar. São quatro tipos de nó, Pessoa, Setor, Projeto e Documento, e quatro tipos de relação: PERTENCE_A, entre uma pessoa e o seu setor; RESPONSAVEL_POR, entre uma pessoa e o projeto que ela conduz; PARTICIPA_DE, entre um setor e um projeto; e CITA, entre um documento e a entidade que ele menciona.</p>
 
-  <h2>4.1 O ponto que mais nos preocupa: fazer o Python conversar com o banco</h2>
-  <p>O módulo de Análise é onde prevemos a maior dificuldade real de implementação. A conta e a comparação dos indicadores pretendemos fazer em Python, mas os dados moram no PostgreSQL, ou seja, cada análise depende do Python abrir uma conexão com o banco (via algo como psycopg2 ou SQLAlchemy), buscar o que precisa e só então processar. Isso traz decisões que ainda não tínhamos parado para pensar direito: filtrar e agregar já dentro do SQL (mais rápido, mas exige escrever consultas mais elaboradas) ou trazer os dados brutos para o Python e processar com as estruturas que estamos aprendendo em Estruturas de Dados (mais simples de programar, mas com risco de puxar volume desnecessário e pesar a memória à toa).</p>
-  <p>Tem também um problema mais chato do que parece: tipos de dado não chegam do banco exatamente como o Python espera, datas, valores decimais e nulos já causaram confusão em exercícios menores da disciplina, e numa análise com várias tabelas envolvidas esse tipo de erro fica mais difícil de rastrear. Como Banco de Dados e Estruturas de Dados são matérias que estamos vendo ao mesmo tempo, sabemos que essa ponte entre os dois lados vai exigir um tempo real de ajuste antes da análise funcionar de forma confiável, e não só de "ligar as peças".</p>
-  <p>Depois que os dados voltam tratados do banco, a ideia para o módulo de Otimização é usar uma fila de prioridade (um heap) para ordenar as alternativas, e para a Apresentação, uma interface web simples em HTML/CSS, sem preocupação estética, só clareza para o operador decidir rápido. Para organizar o trabalho entre as cinco pessoas do grupo, pretendemos usar Git/GitHub para o código e um quadro Kanban (Trello ou GitHub Projects) para dividir tarefas.</p>
-  <p>Nada disso está implementado ainda, e a dificuldade do Python com o banco é uma previsão nossa, não algo que já testamos na prática, é o plano que vamos seguir e ajustar nas próximas etapas, conforme formos avançando em Banco de Dados e Estruturas de Dados.</p>
+  <h2>4.1 O ponto que mais nos preocupa: manter a saída do LLM dentro da ontologia</h2>
+  <p>O LLM é a peça mais frágil do fluxo porque a resposta dele não é determinística. O mesmo texto pode voltar com um campo a mais, com um tipo de relação que não existe na nossa ontologia ou com um JSON que sequer abre, e nada disso aparece como erro antes da hora de gravar. Por isso a saída de cada chamada precisa ser validada contra a ontologia antes de virar carga, e o que não passar na validação vai para revisão manual em vez de entrar no grafo. Tem também a questão do tamanho: documento grande não cabe em uma chamada só, então precisamos dividir o texto em trechos, e aí a mesma entidade aparece em pedaços diferentes, cada um com a sua própria resposta.</p>
+  <p>O problema irmão é a mesma entidade escrita de formas diferentes, "Ana Souza" e "A. Souza", "Setor de Qualidade" e "Qualidade", que sem tratamento vira nó duplicado e estraga a contagem de ligações, justamente o número que usamos para apontar gargalo. A ideia é normalizar o nome e usar uma chave natural na hora da carga, com MERGE em vez de CREATE, para que reprocessar o mesmo documento não duplique nada. Soma-se a isso o OCR, que erra em nome próprio e embaralha a leitura de tabela e de organograma, empurrando erro para dentro do LLM antes mesmo de a estruturação começar.</p>
+  <p>Depois que a carga termina, a ideia para a consulta e análise é ordenar os gargalos pelo número de ligações e de dependências que cada nó concentra, para que os pontos mais críticos apareçam primeiro na lista. Para a apresentação, pensamos em uma interface web simples em HTML/CSS, sem preocupação estética, só clareza para quem vai olhar o grafo e decidir. Para organizar o trabalho entre as cinco pessoas do grupo, pretendemos usar Git/GitHub para o código e um quadro Kanban (Trello ou GitHub Projects) para dividir tarefas.</p>
+  <p>Nada disso está implementado ainda, e as dificuldades que descrevemos com o OCR, com a saída do LLM e com a carga no grafo são previsão nossa, não algo que já testamos na prática, é o plano que vamos seguir e ajustar nas próximas etapas, conforme formos avançando em Banco de Dados e Estruturas de Dados.</p>
 
   <h1>5 Revisando a organização que propusemos</h1>
   <p>Usamos quatro perguntas para conferir se a divisão em módulos faz sentido, e essa revisão nos deixou confortáveis com o resultado:</p>
   <ul class="verificacao">
-    <li><strong>Coesão:</strong> cada módulo trata de um assunto só, cadastro não filtra, consulta não calcula indicador, otimização não decide sozinha.</li>
-    <li><strong>Acoplamento:</strong> baixo. Cada módulo recebe só o que precisa para trabalhar, a otimização, por exemplo, não precisa saber o nome do cliente, só prazo, capacidade e prioridade.</li>
+    <li><strong>Coesão:</strong> cada módulo trata de um assunto só, a ingestão não interpreta o conteúdo que extrai, a estruturação não grava no banco, a carga não analisa nada.</li>
+    <li><strong>Acoplamento:</strong> baixo. Cada módulo recebe só o formato de que precisa, arquivo, texto, JSON ou grafo, o que nos permite trocar o OCR ou o modelo de LLM sem mexer no resto.</li>
     <li><strong>Integração:</strong> está clara. O Quadro 1 mostra exatamente o que cada seta do fluxograma carrega de um módulo para o próximo.</li>
-    <li><strong>Caráter genérico:</strong> os módulos sobrevivem a uma troca de domínio; só as entidades específicas (entrega, veículo) mudariam.</li>
+    <li><strong>Caráter genérico:</strong> extrair, estruturar, carregar, consultar e apresentar sobrevivem a uma troca de domínio; só as entidades específicas (pessoa, setor, projeto) mudariam.</li>
   </ul>
-  <p>Com isso, também conferimos os pontos exigidos nesta etapa: cada função aparece em um único módulo; está claro o que fica armazenado e o que passa de módulo para módulo; é possível seguir um dado desde o cadastro até o resultado final; e busca, ordenação e priorização estão identificadas como necessidades futuras, sem implementação nesta etapa.</p>
+  <p>Com isso, também conferimos os pontos exigidos nesta etapa: cada função aparece em um único módulo; está claro o que fica armazenado, o texto extraído, o JSON e o grafo, e o que passa de módulo para módulo; é possível seguir um documento desde o arquivo até o gargalo apontado na tela; e busca, ordenação e priorização estão identificadas como necessidades futuras, sem implementação nesta etapa.</p>
 
   <h1>6 Considerações finais</h1>
-  <p>Este documento fecha a etapa conceitual do DataPlanner: definimos os cinco módulos, o caminho que a informação percorre entre eles e um caso completo usando entregas como exemplo. A partir daqui, o próximo passo natural é usar Banco de Dados para desenhar as tabelas e relacionamentos por trás do módulo de cadastro, e Estruturas de Dados para implementar de fato a busca, a ordenação e a priorização que hoje existem só no papel.</p>
+  <p>Este documento fecha a etapa conceitual do DataPlanner: definimos os cinco módulos, o caminho que a informação percorre do documento até o grafo e um caso completo, de uma ata digitalizada ao gargalo apontado. A partir daqui, o próximo passo é fechar a ontologia com o que estamos vendo em Banco de Dados e implementar, com Estruturas de Dados, a busca e a ordenação sobre o grafo, que hoje existem só no papel. No horizonte do projeto, essa base de conhecimento em grafo fica disponível como fonte para agentes de IA especialistas da empresa consultarem quando precisarem saber como a empresa funciona.</p>
 
 </section>
 

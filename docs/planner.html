@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[TÍTULO DO TRABALHO]</title>
+<style>
+  @page {
+    size: A4;
+    margin: 3cm 2cm 2cm 3cm;
+    @top-right {
+      content: counter(page);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+    }
+  }
+  @page :first { @top-right { content: normal; } }
+
+  * { box-sizing: border-box; }
+
+  html { background: #e9e9e9; }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    text-align: justify;
+  }
+
+  .folha {
+    width: 21cm;
+    min-height: 29.7cm;
+    padding: 3cm 2cm 2cm 3cm;
+    margin: 1cm auto;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, .25);
+  }
+
+  p { margin: 0; text-indent: 1.25cm; }
+
+  /* Capa: instituição no topo, autor acima do centro, título ao centro, cidade/ano no rodapé. */
+  .capa {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+  }
+  .capa p { text-indent: 0; text-align: center; }
+  .capa .titulo {
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .capa .subtitulo { font-weight: normal; }
+
+  .corpo h1 {
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    margin: 0 0 1.5em;
+    page-break-before: always;
+  }
+  .corpo > h1:first-child { page-break-before: avoid; }
+  .corpo h1.sem-numeracao { text-align: center; }
+
+  .corpo h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: left;
+    margin: 1.5em 0 0.75em;
+    page-break-after: avoid;
+  }
+
+  .citacao-longa {
+    margin: 1.5em 0 1.5em 4cm;
+    font-size: 10pt;
+    line-height: 1;
+    text-indent: 0;
+    text-align: justify;
+  }
+
+  .referencia {
+    text-indent: 0;
+    text-align: left;
+    line-height: 1;
+    margin: 0 0 12pt;
+  }
+
+  @media print {
+    html { background: none; }
+    .folha {
+      width: auto;
+      min-height: 0;
+      padding: 0;
+      margin: 0;
+      background: none;
+      box-shadow: none;
+    }
+    .capa { min-height: 24.7cm; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<section class="folha capa">
+  <div>
+    <p>[NOME DA INSTITUIÇÃO]</p>
+    <p>[NOME DO CURSO]</p>
+    <p>[DISCIPLINA]</p>
+  </div>
+
+  <div>
+    <p>[NOME COMPLETO DO AUTOR]</p>
+  </div>
+
+  <div>
+    <h1 class="titulo">[TÍTULO DO TRABALHO]</h1>
+    <p class="subtitulo">[subtítulo, se houver]</p>
+  </div>
+
+  <div>
+    <p>[CIDADE]</p>
+    <p>[ANO]</p>
+  </div>
+</section>
+
+<section class="folha corpo">
+
+  <h1>1 INTRODUÇÃO</h1>
+  <p>[Contextualize o tema em linhas gerais: o que é, por que importa e em que cenário se insere.]</p>
+  <p>[Delimite o problema e apresente a pergunta que o trabalho responde.]</p>
+  <p>[Apresente o objetivo geral, os objetivos específicos e a justificativa.]</p>
+
+  <h1>2 DESENVOLVIMENTO</h1>
+  <p>[Fundamentação teórica: apresente os conceitos e autores que sustentam a argumentação.]</p>
+
+  <h2>2.1 [Título da subseção]</h2>
+  <p>[Desenvolva o primeiro ponto. Citação direta curta, com até três linhas, vai entre aspas no corpo do texto: "[trecho citado]" (SOBRENOME, 2020, p. 15).]</p>
+
+  <blockquote class="citacao-longa">
+    [Citação direta com mais de três linhas: recuo de 4 cm da margem esquerda, fonte 10, espaçamento simples e sem aspas.] (SOBRENOME, 2020, p. 42).
+  </blockquote>
+
+  <p>[Comente a citação e conecte-a ao argumento.]</p>
+
+  <h2>2.2 [Título da subseção]</h2>
+  <p>[Desenvolva o segundo ponto: metodologia, análise, resultados ou discussão, conforme o trabalho.]</p>
+
+  <h1>3 CONCLUSÃO</h1>
+  <p>[Retome o problema, sintetize os resultados e responda aos objetivos. Sem introduzir informação nova.]</p>
+
+  <h1 class="sem-numeracao">REFERÊNCIAS</h1>
+  <p class="referencia">SOBRENOME, Nome. <strong>Título do livro</strong>: subtítulo. 2. ed. Cidade: Editora, 2020.</p>
+  <p class="referencia">SOBRENOME, Nome; SOBRENOME, Nome. Título do artigo. <strong>Nome da Revista</strong>, Cidade, v. 10, n. 2, p. 100-115, 2021.</p>
+  <p class="referencia">SOBRENOME, Nome. <strong>Título do documento eletrônico</strong>. Cidade, 2022. Disponível em: https://exemplo.com. Acesso em: 1 jan. 2026.</p>
+
+</section>
+
+</body>
+</html>
